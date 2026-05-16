@@ -206,26 +206,33 @@ export default async function FlowerPage({
                 More{" "}
                 <span style={{ color: tierColor }}>{tierName}</span> Strains
               </h2>
-              <div className={styles.relatedScroll}>
-                {related.map((r) => (
-                  <Link
-                    key={r.sku}
-                    href={`/flower/${r.slug}`}
-                    className={styles.relatedCard}
-                  >
-                    <div className={styles.relatedImg}>
-                      {r.image ? (
-                        <img src={r.image} alt={r.name} loading="lazy" />
-                      ) : (
-                        <span>{r.name[0]}</span>
-                      )}
-                    </div>
-                    <div className={styles.relatedBody}>
-                      <h3>{r.name}</h3>
-                      <span className={styles.relatedThc}>THC {r.thc}</span>
-                    </div>
-                  </Link>
-                ))}
+              <div className={styles.relatedWrap}>
+                <div className={styles.relatedScroll}>
+                  {related.map((r) => (
+                    <Link
+                      key={r.sku}
+                      href={`/flower/${r.slug}`}
+                      className={styles.relatedCard}
+                    >
+                      <div className={styles.relatedImg}>
+                        {r.image ? (
+                          <img src={r.image} alt={r.name} loading="lazy" />
+                        ) : (
+                          <span>{r.name[0]}</span>
+                        )}
+                      </div>
+                      <div className={styles.relatedBody}>
+                        <h3>{r.name}</h3>
+                        <span className={styles.relatedThc}>THC {r.thc}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                {related.length > 4 && (
+                  <div className={styles.scrollFade}>
+                    <span className={styles.scrollArrow}>&#8250;</span>
+                  </div>
+                )}
               </div>
             </section>
           )}
