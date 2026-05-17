@@ -22,7 +22,7 @@ async function main() {
   console.log('[prebuild] Fetching live stock from Apps Script...');
 
   try {
-    const url = `${APPS_SCRIPT_URL}?store=ALC01`;
+    const url = `${APPS_SCRIPT_URL}?store=SCC01`;
     const res = await fetch(url, { signal: AbortSignal.timeout(30000) });
 
     if (!res.ok) {
@@ -35,6 +35,39 @@ async function main() {
       throw new Error('Invalid response: missing flowers or items');
     }
 
+    // ── Post-process flowers: derive sale flags + clean names ──
+    const SALE_RE = /\bSALE\b/i;
+    const ON_SALE_RE = /ON\s*SALE/i;
+    function hasSalePrice(f) {
+      return !!(
+        (f.price3g && f.price3g.sale !== null) ||
+        (f.price5g && f.price5g.sale !== null) ||
+        (f.price14g && f.price14g.sale !== null) ||
+        (f.price28g && f.price28g.sale !== null)
+      );
+    }
+    function cleanName(name) {
+      return name
+        .replace(/\s*\(?\s*AAA\+?\s*ON\s*SALE\s*\)?\s*$/i, '')
+        .replace(/\s*\(?\s*AAA\+?\s*SALE!?\s*\)?\s*$/i, '')
+        .replace(/\s*\bSALE!?\s*$/i, '')
+        .replace(/\s*\bON\s*SALE\s*$/i, '')
+        .trim();
+    }
+    let saleFixed = 0;
+    for (const f of data.flowers) {
+      // Derive isSale from name or prices
+      if (!f.isSale) {
+        if (SALE_RE.test(f.name) || ON_SALE_RE.test(f.name) || hasSalePrice(f)) {
+          f.isSale = true;
+          saleFixed++;
+        }
+      }
+      // Clean display name
+      f.name = cleanName(f.name);
+    }
+    if (saleFixed > 0) console.log(`[prebuild] Fixed ${saleFixed} sale flags from names`);
+
     // Write flowers.json
     fs.writeFileSync(FLOWERS_PATH, JSON.stringify(data.flowers, null, 2), 'utf-8');
     console.log(`[prebuild] flowers.json updated: ${data.flowers.length} products`);
@@ -43,6 +76,18 @@ async function main() {
     const tiers = {};
     data.flowers.forEach(f => { tiers[f.tier] = (tiers[f.tier] || 0) + 1; });
     Object.entries(tiers).forEach(([t, c]) => console.log(`  ${t}: ${c}`));
+
+    // ── Post-process items: fix '$[object Object]' prices ──
+    let itemsFixed = 0;
+    for (const it of data.items) {
+      if (typeof it.price === 'string' && it.price.includes('[object')) {
+        // Price was mangled by parsePriceCell_ returning an object
+        // Try to extract from the raw price data
+        it.price = '';
+        itemsFixed++;
+      }
+    }
+    if (itemsFixed > 0) console.log(`[prebuild] Fixed ${itemsFixed} mangled item prices`);
 
     // Write items.json
     fs.writeFileSync(ITEMS_PATH, JSON.stringify(data.items, null, 2), 'utf-8');

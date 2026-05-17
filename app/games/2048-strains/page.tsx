@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import ScreenLock from "../../components/ScreenLock";
 
 const SIZE = 4;
 
@@ -186,12 +189,8 @@ export default function Game2048Page() {
 
   return (
     <main>
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: "rgba(3,7,18,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(51,65,85,0.3)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 1440, margin: "0 auto", padding: "0 24px", height: 64 }}>
-          <a href="/" style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 900, color: "white", textDecoration: "none" }}>ALWAYS🔥LIT</a>
-          <a href="/games" style={{ color: "var(--text-secondary)", fontSize: 14, fontWeight: 600, textDecoration: "none" }}>← All Games</a>
-        </div>
-      </nav>
+      <Navbar />
+      <ScreenLock />
 
       <div
         style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100vh", paddingTop: 85, paddingBottom: 40, padding: "85px 16px 40px" }}
@@ -199,7 +198,18 @@ export default function Game2048Page() {
         onTouchEnd={handleTouchEnd}
       >
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 900, marginBottom: 4, color: "white" }}>🔢 2048 Strains</h1>
-        <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 12 }}>Merge tiers: Budget → AA → AAA+ → Premium → Exotic!</p>
+        <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 8 }}>Merge tiers: Budget → AA → AAA+ → Premium → Exotic!</p>
+
+        {/* How to Play */}
+        <div style={{ maxWidth: 360, width: "100%", marginBottom: 16, padding: "12px 16px", background: "rgba(45,106,79,0.08)", border: "1px solid rgba(45,106,79,0.15)", borderRadius: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#2D6A4F", marginBottom: 6 }}>📖 How to Play</div>
+          <ul style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0, paddingLeft: 18 }}>
+            <li><strong>Swipe</strong> or use <strong>Arrow Keys / WASD</strong> to slide all tiles</li>
+            <li>When two tiles with the <strong>same number</strong> collide, they <strong>merge into one</strong></li>
+            <li>Keep merging to climb tiers: 2→4→8→16→32→64→128→256→512→1024→<strong>2048!</strong></li>
+            <li>The game ends when no more moves are possible</li>
+          </ul>
+        </div>
 
         <div style={{ display: "flex", gap: 20, marginBottom: 20 }}>
           <div style={{ textAlign: "center", padding: "8px 20px", background: "var(--bg-card)", border: "1px solid var(--border-subtle)", borderRadius: 12 }}>
@@ -262,6 +272,7 @@ export default function Game2048Page() {
         <p style={{ marginTop: 20, fontSize: 12, color: "var(--text-muted)" }}>Arrow keys / WASD / Swipe to move tiles</p>
         <button onClick={resetGame} style={{ marginTop: 10, padding: "8px 16px", background: "transparent", border: "1px solid var(--border-subtle)", color: "var(--text-secondary)", borderRadius: 10, cursor: "pointer", fontSize: 12 }}>New Game</button>
       </div>
+          <Footer />
     </main>
   );
 }

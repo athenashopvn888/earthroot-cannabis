@@ -2,9 +2,11 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import { allFlowers, TIER_CONFIG, type FlowerProduct, type PricePoint } from "../../lib/products";
 import { getStrainData } from "../../lib/strainData";
 import RelatedScroll from "./RelatedScroll";
+import Magnifier from "../../components/Magnifier";
 import styles from "./flower.module.css";
 
 /* -- Pre-generate all flower pages -- */
@@ -26,10 +28,10 @@ export async function generateMetadata({
   const strainData = getStrainData(flower.name, flower.type, flower.tier, flower.thc);
 
   return {
-    title: `${flower.name} | ${tierName} ${flower.type === "indica" ? "Indica" : flower.type === "sativa" ? "Sativa" : "Hybrid"} | THC ${flower.thc} | Always Lit Cannabis Toronto`,
+    title: `${flower.name} | ${tierName} ${flower.type === "indica" ? "Indica" : flower.type === "sativa" ? "Sativa" : "Hybrid"} | THC ${flower.thc} | Spirit Corner Cannabis Ottawa`,
     description: strainData.metaDescription,
     openGraph: {
-      title: `${flower.name} | Always Lit Cannabis`,
+      title: `${flower.name} | Spirit Corner Cannabis`,
       description: strainData.metaDescription,
       images: flower.image ? [{ url: flower.image, width: 800, height: 800, alt: flower.name }] : [],
     },
@@ -51,14 +53,14 @@ function getJsonLd(flower: FlowerProduct) {
     name: flower.name,
     image: flower.image,
     description: strainData.description,
-    brand: { "@type": "Brand", name: "Always Lit Cannabis" },
+    brand: { "@type": "Brand", name: "Spirit Corner Cannabis" },
     sku: flower.sku,
     offers: {
       "@type": "Offer",
       price: lowestPrice || 0,
       priceCurrency: "CAD",
       availability: "https://schema.org/InStock",
-      seller: { "@type": "Organization", name: "Always Lit Cannabis" },
+      seller: { "@type": "Organization", name: "Spirit Corner Cannabis" },
     },
   };
 }
@@ -131,7 +133,7 @@ export default async function FlowerPage({
             {/* -- Image -- */}
             <div className={styles.imageWrap}>
               {flower.image ? (
-                <img src={flower.image} alt={flower.name} className={styles.image} />
+                <Magnifier src={flower.image} alt={flower.name} className={styles.image} />
               ) : (
                 <div className={styles.imagePlaceholder}>{flower.name[0]}</div>
               )}
@@ -251,6 +253,8 @@ export default async function FlowerPage({
             />
           )}
         </div>
+
+        <Footer />
       </main>
     </>
   );

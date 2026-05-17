@@ -68,3 +68,115 @@
 .priceVal { font-family: var(--font-display); font-size: 20px; font-weight: 900; background: linear-gradient(135deg, #40916C, #2D6A4F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .priceUnit { font-size: 12px; color: var(--text-muted); }
 .skuTag { font-size: 10px; color: var(--text-muted); }
+
+/* ── Hero Intro ── */
+.heroIntro {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 8px auto 0;
+}
+
+/* ── Empty State ── */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+}
+.emptyIcon { font-size: 48px; display: block; margin-bottom: 12px; }
+.emptyState h3 { font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 0 0 8px; }
+.emptyState p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+
+/* ── SEO Content ── */
+.seoSection {
+  padding: 48px 24px 60px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+}
+.seoTitle {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+.seoBody {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 0 0 28px;
+  max-width: 900px;
+}
+
+/* ── FAQ ── */
+.faqBlock { margin-top: 28px; }
+.faqTitle {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}
+.faqItem {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.faqQuestion {
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  list-style: none;
+  background: var(--bg-primary);
+  transition: background 0.2s;
+}
+.faqQuestion:hover { background: var(--bg-secondary); }
+.faqQuestion::-webkit-details-marker { display: none; }
+.faqQuestion::after { content: "+"; float: right; font-size: 18px; color: var(--text-muted); }
+.faqItem[open] .faqQuestion::after { content: "−"; }
+.faqAnswer {
+  padding: 0 18px 14px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ── Visit CTA ── */
+.visitCta {
+  margin-top: 36px;
+  padding: 28px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+.visitTitle {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+.visitText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 16px;
+}
+.visitBtn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: var(--green-dark);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.visitBtn:hover { background: #1B4332; }
+

@@ -1,6 +1,7 @@
 "use client";
 
-import styles from "../page.module.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const GAMES = [
   {
@@ -43,55 +44,7 @@ const GAMES = [
 export default function GamesPage() {
   return (
     <main>
-      {/* Navbar */}
-      <nav
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          background: "rgba(3,7,18,0.85)",
-          backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(51,65,85,0.3)",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            maxWidth: 1440,
-            margin: "0 auto",
-            padding: "0 24px",
-            height: 64,
-          }}
-        >
-          <a
-            href="/"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 22,
-              fontWeight: 900,
-              color: "white",
-              textDecoration: "none",
-            }}
-          >
-            ALWAYS🔥LIT
-          </a>
-          <a
-            href="/"
-            style={{
-              color: "var(--text-secondary)",
-              fontSize: 14,
-              fontWeight: 600,
-              textDecoration: "none",
-            }}
-          >
-            ← Back to Menu
-          </a>
-        </div>
-      </nav>
+      <Navbar />
 
       <div
         style={{
@@ -127,7 +80,7 @@ export default function GamesPage() {
             }}
           >
             Kill time while your order&apos;s ready. Beat the high score. No
-            dispensary in Toronto has this.
+            dispensary in Ottawa has this.
           </p>
         </div>
 
@@ -202,6 +155,7 @@ export default function GamesPage() {
           ))}
         </div>
       </div>
+      <Footer />
     </main>
   );
 }

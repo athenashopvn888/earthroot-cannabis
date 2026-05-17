@@ -58,7 +58,7 @@ export function getStrainData(
       : type === "sativa"
       ? "an uplifting cerebral buzz and creative energy ideal for daytime use"
       : "a balanced experience combining physical relaxation with mental clarity"
-  }. Available in-store at Always Lit Cannabis, Toronto.`;
+  }. Available in-store at Spirit Corner Cannabis, Ottawa.`;
 
   const metaDescription = `${name} - ${tierDesc} ${typeLabel}${
     thc ? ` at ${thc} THC` : ""
@@ -68,7 +68,7 @@ export function getStrainData(
       : type === "sativa"
       ? "Uplifting cerebral buzz."
       : "Balanced hybrid effects."
-  } Walk-in welcome at Always Lit Cannabis Toronto. Real-time stock.`;
+  } Walk-in welcome at Spirit Corner Cannabis Ottawa. Real-time stock.`;
 
   return { effects, description, metaDescription };
 }

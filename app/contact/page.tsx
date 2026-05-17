@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import styles from "./contact.module.css";
 
 export const metadata: Metadata = {
-  title: "Contact Us — Always Lit Cannabis | 644 Queen St W, Toronto",
+  title: "Contact Us — Spirit Corner Cannabis | 251 Dalhousie St, Ottawa",
   description:
-    "Visit Always Lit Cannabis at 644 Queen St W, Toronto, ON M6J 1E4. Open 7 days a week, 10AM–3AM. Walk-ins welcome. Queen West & Bathurst area.",
+    "Visit Spirit Corner Cannabis at 251 Dalhousie St, Ottawa, ON K1N 1E7. Open 7 days a week, 10AM–3AM. Walk-ins welcome. ByWard Market & Bathurst area.",
   openGraph: {
-    title: "Contact Always Lit Cannabis — Toronto Dispensary",
+    title: "Contact Spirit Corner Cannabis — Ottawa Dispensary",
     description:
-      "644 Queen St W, Toronto. Open daily 10AM–3AM. Premium cannabis, always fire.",
+      "251 Dalhousie St, Ottawa. Open daily 10AM–3AM. Premium cannabis, always fire.",
   },
 };
 
@@ -22,10 +23,10 @@ export default function ContactPage() {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            Visit <span className={styles.heroAccent}>Always Lit</span>
+            Visit <span className={styles.heroAccent}>Spirit Corner</span>
           </h1>
           <p className={styles.heroSub}>
-            644 Queen St W · Toronto, ON M6J 1E4
+            251 Dalhousie St · Ottawa, ON K1N 1E7
           </p>
         </div>
       </section>
@@ -39,11 +40,11 @@ export default function ContactPage() {
               <div className={styles.infoIcon}>📍</div>
               <h2 className={styles.infoTitle}>Location</h2>
               <p className={styles.infoText}>
-                644 Queen St W
+                251 Dalhousie St
                 <br />
-                Toronto, ON M6J 1E4
+                Ottawa, ON K1N 1E7
                 <br />
-                <span className={styles.infoMuted}>Queen West &amp; Bathurst</span>
+                <span className={styles.infoMuted}>ByWard Market &amp; Bathurst</span>
               </p>
               <a
                 href="https://maps.app.goo.gl/YFPDuRCjwiuZL4J86"
@@ -130,34 +131,21 @@ export default function ContactPage() {
           {/* Map */}
           <div className={styles.mapSection}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2887.0!2d-79.4028!3d43.6483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34de48e69e9d%3A0x0!2s644+Queen+St+W%2C+Toronto%2C+ON+M6J+1E4!5e0!3m2!1sen!2sca!4v1"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2887.0!2d-79.4028!3d43.6483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34de48e69e9d%3A0x0!2s644+Queen+St+W%2C+Ottawa%2C+ON+M6J+1E4!5e0!3m2!1sen!2sca!4v1"
               width="100%"
               height="400"
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Always Lit Cannabis — 644 Queen St W, Toronto"
+              title="Spirit Corner Cannabis — 251 Dalhousie St, Ottawa"
             ></iframe>
           </div>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className={styles.footer}>
-        <div className={styles.footerInner}>
-          <div className={styles.footerBrand}>
-            ALWAYS<span style={{ color: "var(--fire-orange)" }}>🔥</span>LIT
-          </div>
-          <p className={styles.footerText}>
-            644 Queen St W, Toronto, ON M6J 1E4 · Open Daily 10AM–3AM
-          </p>
-          <p className={styles.footerLegal}>
-            © {new Date().getFullYear()} Always Lit Cannabis. Must be 19+ to
-            enter. Please consume responsibly.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

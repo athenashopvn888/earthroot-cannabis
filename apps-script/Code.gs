@@ -193,8 +193,16 @@ function buildProductJSON_(catalog, stockData) {
     if (['EXOTIC', 'PREMIUM', 'AAA+', 'AA', 'BUDGET'].indexOf(tier) < 0) continue;
     
     var name = String(f['Strain'] || '').trim();
-    // Strip sale emoji/text from strain name
+    
+    // Detect sale from strain name BEFORE stripping it
+    var nameHasSale = /\bSALE\b/i.test(name) || /ON\s*SALE/i.test(name);
+    
+    // Strip sale emoji/text from strain name for clean display
     name = name.replace(/[\u{1F525}\u{2728}]?\s*SALE$/u, '').replace(/\?SALE$/, '').trim();
+    // Also strip "(AAA+ ON SALE)" / "AAA+ SALE!" patterns
+    name = name.replace(/\s*\(?\s*AAA\+?\s*ON\s*SALE\s*\)?\s*$/i, '').trim();
+    name = name.replace(/\s*\(?\s*AAA\+?\s*SALE!?\s*\)?\s*$/i, '').trim();
+    name = name.replace(/\s*\bON\s*SALE\s*$/i, '').trim();
     if (!name) continue;
     
     // Detect type + flags from Type column (e.g. "IH SALE", "SH HOT")
@@ -219,7 +227,7 @@ function buildProductJSON_(catalog, stockData) {
     if (!p3g && !p5g && !p14g && !p28g) continue;
     
     // Determine sale/hot from Type column flags
-    var isSale = typeInfo.isSale;
+    var isSale = typeInfo.isSale || nameHasSale;
     var isHot = typeInfo.isHot;
     
     // Also check explicit IsHot / IsSale columns if present
@@ -284,7 +292,14 @@ function buildProductJSON_(catalog, stockData) {
     var priceStr = '';
     if (priceRaw !== null && priceRaw !== undefined && String(priceRaw).trim()) {
       var p = parsePriceCell_(priceRaw);
-      priceStr = p ? ('$' + p) : String(priceRaw).trim();
+      if (p && typeof p === 'object') {
+        // parsePriceCell_ returns {regular, sale} — show sale if available
+        priceStr = p.sale !== null ? '$' + p.sale : '$' + p.regular;
+      } else if (p) {
+        priceStr = '$' + p;
+      } else {
+        priceStr = String(priceRaw).trim();
+      }
     }
     
     items.push({

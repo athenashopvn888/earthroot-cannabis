@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import ScreenLock from "../../components/ScreenLock";
 
 const CELL = 20;
 const COLS = 20;
@@ -232,18 +235,26 @@ export default function SnakeMunchiesPage() {
 
   return (
     <main>
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: "rgba(3,7,18,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(51,65,85,0.3)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 1440, margin: "0 auto", padding: "0 24px", height: 64 }}>
-          <a href="/" style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 900, color: "white", textDecoration: "none" }}>ALWAYS🔥LIT</a>
-          <a href="/games" style={{ color: "var(--text-secondary)", fontSize: 14, fontWeight: 600, textDecoration: "none" }}>← All Games</a>
-        </div>
-      </nav>
+      <Navbar />
+      <ScreenLock />
 
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", paddingTop: 80, paddingBottom: 40 }}>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 900, marginBottom: 8, color: "white" }}>🐍 Snake Munchies</h1>
         <p style={{ fontSize: 14, color: "var(--text-secondary)", marginBottom: 20 }}>
           High Score: <span style={{ color: "#fbbf24", fontWeight: 700 }}>{highScore}</span>
         </p>
+
+        {/* How to Play */}
+        <div style={{ maxWidth: 400, width: "100%", marginBottom: 16, padding: "12px 16px", background: "rgba(45,106,79,0.08)", border: "1px solid rgba(45,106,79,0.15)", borderRadius: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#2D6A4F", marginBottom: 6 }}>📖 How to Play</div>
+          <ul style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0, paddingLeft: 18 }}>
+            <li>Use <strong>Arrow Keys</strong> or <strong>Swipe</strong> to change direction</li>
+            <li>Eat the food (coloured dots) to grow longer and score points</li>
+            <li>Don&apos;t crash into the walls or your own body!</li>
+            <li>The snake speeds up as you score higher</li>
+          </ul>
+        </div>
+
         <canvas
           ref={canvasRef}
           width={W}
@@ -254,6 +265,7 @@ export default function SnakeMunchiesPage() {
           Arrow keys / WASD to move · Space to start
         </p>
       </div>
+          <Footer />
     </main>
   );
 }

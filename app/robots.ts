@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/"],
     },
-    sitemap: "https://alwayslitcannabis.com/sitemap.xml",
+    sitemap: "https://spiritcornercannabis.com/sitemap.xml",
   };
 }

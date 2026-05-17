@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import ScreenLock from "../../components/ScreenLock";
 
 const W = 420;
 const H = 560;
@@ -302,21 +305,30 @@ export default function BrickBreakerPage() {
 
   return (
     <main>
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000, background: "rgba(3,7,18,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(51,65,85,0.3)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 1440, margin: "0 auto", padding: "0 24px", height: 64 }}>
-          <a href="/" style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 900, color: "white", textDecoration: "none" }}>ALWAYS🔥LIT</a>
-          <a href="/games" style={{ color: "var(--text-secondary)", fontSize: 14, fontWeight: 600, textDecoration: "none" }}>← All Games</a>
-        </div>
-      </nav>
+      <Navbar />
+      <ScreenLock />
 
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh", paddingTop: 80, paddingBottom: 40 }}>
         <h1 style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 900, marginBottom: 8, color: "white" }}>🧱 Brick Breaker 420</h1>
         <p style={{ fontSize: 14, color: "var(--text-secondary)", marginBottom: 20 }}>
           High Score: <span style={{ color: "#fbbf24", fontWeight: 700 }}>{highScore}</span>
         </p>
+
+        {/* How to Play */}
+        <div style={{ maxWidth: 420, width: "100%", marginBottom: 16, padding: "12px 16px", background: "rgba(45,106,79,0.08)", border: "1px solid rgba(45,106,79,0.15)", borderRadius: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#2D6A4F", marginBottom: 6 }}>📖 How to Play</div>
+          <ul style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.7, margin: 0, paddingLeft: 18 }}>
+            <li>Move your <strong>mouse</strong> or <strong>finger</strong> to control the paddle at the bottom</li>
+            <li>Bounce the ball to break all the coloured bricks above</li>
+            <li>Gold-tier bricks (top rows) need <strong>2 hits</strong> to break</li>
+            <li>Don&apos;t let the ball fall below the paddle!</li>
+          </ul>
+        </div>
+
         <canvas ref={canvasRef} width={W} height={H} style={{ border: "1px solid rgba(51,65,85,0.3)", borderRadius: 16, cursor: "none", maxWidth: "100%", touchAction: "none" }} />
         <p style={{ marginTop: 16, fontSize: 13, color: "var(--text-muted)" }}>Move mouse to control paddle · Don&apos;t let the ball drop</p>
       </div>
+          <Footer />
     </main>
   );
 }

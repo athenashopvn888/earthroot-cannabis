@@ -1,18 +1,22 @@
-import { allFlowers, TIER_CONFIG, CATEGORY_CONFIG } from "./lib/products";
 import type { MetadataRoute } from "next";
+import { TIER_CONFIG, CATEGORY_CONFIG, allFlowers } from "./lib/products";
+import { SEO_PAGES } from "./lib/seoPages";
 
-const BASE = "https://alwayslitcannabis.com";
+const BASE = "https://spiritcornercannabis.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date().toISOString();
 
-  /* ── Static pages ── */
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE, lastModified: now, changeFrequency: "daily", priority: 1.0 },
-    { url: `${BASE}/games`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: BASE, lastModified: now, changeFrequency: "daily", priority: 1 },
+    { url: `${BASE}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/delivery`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/games`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
   ];
 
-  /* ── Tier pages ── */
+  /* Tier pages */
   const tierPages: MetadataRoute.Sitemap = Object.values(TIER_CONFIG).map((t) => ({
     url: `${BASE}/${t.slug}`,
     lastModified: now,
@@ -20,31 +24,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  /* ── Item category pages ── */
-  const catPages: MetadataRoute.Sitemap = Object.values(CATEGORY_CONFIG).map((c) => ({
+  /* Item category pages */
+  const itemPages: MetadataRoute.Sitemap = Object.values(CATEGORY_CONFIG).map((c) => ({
     url: `${BASE}/items/${c.slug}`,
     lastModified: now,
     changeFrequency: "daily" as const,
     priority: 0.8,
   }));
 
-  /* ── Individual flower pages (the SEO gold mine) ── */
+  /* Flower detail pages */
   const flowerPages: MetadataRoute.Sitemap = allFlowers.map((f) => ({
     url: `${BASE}/flower/${f.slug}`,
     lastModified: now,
-    changeFrequency: "daily" as const,
+    changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
 
-  /* ── Game pages ── */
-  const gamePages: MetadataRoute.Sitemap = [
-    "flappy-bud", "snake-munchies", "brick-breaker", "memory-match", "2048-strains"
-  ].map((g) => ({
-    url: `${BASE}/games/${g}`,
+  /* SEO landing pages */
+  const seoPages: MetadataRoute.Sitemap = SEO_PAGES.map((p) => ({
+    url: `${BASE}/info/${p.slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
-    priority: 0.5,
+    priority: 0.8,
   }));
 
-  return [...staticPages, ...tierPages, ...catPages, ...flowerPages, ...gamePages];
+  return [...staticPages, ...tierPages, ...itemPages, ...flowerPages, ...seoPages];
 }

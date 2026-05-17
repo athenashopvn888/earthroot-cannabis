@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import FlowerCard from "../components/FlowerCard";
 import {
   getFlowersByTier,
   getTierFromSlug,
   TIER_CONFIG,
-  type FlowerProduct,
 } from "../lib/products";
+import { TIER_SEO } from "../lib/tierSeoContent";
 import styles from "./tier.module.css";
 
 /* -- Generate all tier pages at build -- */
@@ -25,19 +26,17 @@ export async function generateMetadata({
   const tierInfo = getTierFromSlug(tierSlug);
   if (!tierInfo) return {};
   const flowers = getFlowersByTier(tierInfo.key);
+  const seo = TIER_SEO[tierInfo.key];
 
   return {
-    title: `${tierInfo.config.name} Cannabis Flower — ${flowers.length} Strains | $${tierInfo.config.unitPrice}/g`,
-    description: `Shop ${flowers.length} ${tierInfo.config.name.toLowerCase()} cannabis strains at Always Lit Cannabis. ${tierInfo.config.tagline}. Starting at $${tierInfo.config.unitPrice}/g. Toronto's most fire dispensary.`,
+    title: seo?.seoTitle || `${tierInfo.config.name} Cannabis Flower — ${flowers.length} Strains`,
+    description: seo?.seoIntro || `Shop ${flowers.length} ${tierInfo.config.name.toLowerCase()} cannabis strains at Spirit Corner Cannabis.`,
     openGraph: {
-      title: `${tierInfo.config.name} Flower | Always Lit Cannabis`,
+      title: `${tierInfo.config.name} Flower | Spirit Corner Cannabis`,
       description: `${flowers.length} curated ${tierInfo.config.name.toLowerCase()} strains in stock now. From $${tierInfo.config.unitPrice}/g.`,
     },
   };
 }
-
-/* Top 3 tiers get 6g label */
-const TOP_TIERS = ["EXOTIC", "PREMIUM", "AAA+"];
 
 /* -- Page component -- */
 export default async function TierPage({
@@ -51,8 +50,8 @@ export default async function TierPage({
 
   const flowers = getFlowersByTier(tierInfo.key);
   const { config } = tierInfo;
+  const seo = TIER_SEO[tierInfo.key];
 
-  // Separate sale items
   const saleFlowers = flowers.filter((f) => f.isSale);
   const regularFlowers = flowers.filter((f) => !f.isSale);
   const hotFlowers = flowers.filter((f) => f.isHot);
@@ -61,65 +60,79 @@ export default async function TierPage({
     <main className={styles.main}>
       <Navbar />
 
-      {/* -- Hero banner -- */}
+      {/* ── Banner Image (standalone, no overlay text) ── */}
+      <section className={styles.bannerSection}>
+        <img
+          src={config.banner}
+          alt={`${config.name} Cannabis Flower — ${config.tagline}`}
+          className={styles.bannerImg}
+        />
+      </section>
+
+      {/* ── Hero Content BELOW banner ── */}
       <section
-        className={styles.hero}
+        className={styles.heroInfo}
         style={{ "--tier-color": config.color } as React.CSSProperties}
       >
-        <div className={styles.heroBannerWrap}>
-          <img
-            src={config.banner}
-            alt={`${config.name} Cannabis Flower — ${config.tagline}`}
-            className={styles.heroBannerImg}
-          />
-          <div className={styles.heroBannerOverlay} />
-        </div>
-        <div className={styles.heroContent}>
-          <span className={styles.heroIcon}>{config.icon}</span>
-          <h1 className={styles.heroTitle}>{config.name}</h1>
-          <p className={styles.heroTagline}>{config.tagline}</p>
-          <div className={styles.heroUnitPrice}>${config.unitPrice}/g</div>
-
-          {/* Deal boxes */}
-          <div className={styles.dealRow}>
-            <div className={styles.dealBox}>
-              <div className={styles.dealLabel}>{config.deal3g.label}</div>
-              <div className={styles.dealPrice}>
-                = <span className={styles.dealAmount}>${config.deal3g.price}</span> / {config.deal3g.total}
-              </div>
+        <div className={styles.heroInfoInner}>
+          <div className={styles.heroLeft}>
+            <div className={styles.heroTitleRow}>
+              <span className={styles.heroIcon}>{config.icon}</span>
+              <h1 className={styles.heroTitle}>
+                <span style={{ color: config.color }}>{config.name}</span>
+              </h1>
             </div>
-            {config.deal6g && (
-              <div className={styles.dealBox}>
-                <div className={styles.dealLabel}>{config.deal6g.label}</div>
-                <div className={styles.dealPrice}>
-                  = <span className={styles.dealAmount}>${config.deal6g.price}</span> / {config.deal6g.total}
-                </div>
-              </div>
-            )}
+            <p className={styles.heroTagline}>{config.tagline}</p>
+            <div className={styles.heroStats}>
+              <span className={styles.stat}>
+                <strong>{flowers.length}</strong> strains
+              </span>
+              {saleFlowers.length > 0 && (
+                <span className={styles.statSale}>
+                  🔥 {saleFlowers.length} on sale
+                </span>
+              )}
+              {hotFlowers.length > 0 && (
+                <span className={styles.statHot}>
+                  ⚡ {hotFlowers.length} hot picks
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className={styles.heroStats}>
-            <span className={styles.stat}>
-              <strong>{flowers.length}</strong> strains
-            </span>
-            {saleFlowers.length > 0 && (
-              <span className={styles.statSale}>
-                🔥 {saleFlowers.length} on sale
-              </span>
-            )}
-            {hotFlowers.length > 0 && (
-              <span className={styles.statHot}>
-                ⚡ {hotFlowers.length} hot picks
-              </span>
+          <div className={styles.heroRight}>
+            <div className={styles.unitPriceBox}>
+              <span className={styles.unitPriceLabel}>Starting at</span>
+              <span className={styles.unitPriceValue}>${config.unitPrice}/g</span>
+            </div>
+
+            {(config.deal3g || config.deal6g) && (
+            <div className={styles.dealRow}>
+              {config.deal3g && (
+              <div className={styles.dealBox}>
+                <div className={styles.dealLabel}>🎁 {config.deal3g.label}</div>
+                <div className={styles.dealPrice}>
+                  = <strong>${config.deal3g.price}</strong> / {config.deal3g.total}
+                </div>
+              </div>
+              )}
+              {config.deal6g && (
+                <div className={styles.dealBox}>
+                  <div className={styles.dealLabel}>🎁 {config.deal6g.label}</div>
+                  <div className={styles.dealPrice}>
+                    = <strong>${config.deal6g.price}</strong> / {config.deal6g.total}
+                  </div>
+                </div>
+              )}
+            </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* -- Product grid -- */}
+      {/* ── Product grid ── */}
       <section className={styles.products}>
         <div className={styles.container}>
-          {/* Sale section */}
           {saleFlowers.length > 0 && (
             <>
               <h2 className={styles.sectionTitle}>
@@ -130,7 +143,6 @@ export default async function TierPage({
                   <FlowerCard
                     key={`${f.sku}-${f.slug}`}
                     flower={f}
-                    tierColor={config.color}
                     tierKey={tierInfo.key}
                   />
                 ))}
@@ -138,7 +150,6 @@ export default async function TierPage({
             </>
           )}
 
-          {/* All strains */}
           <h2 className={styles.sectionTitle}>
             All{" "}
             <span style={{ color: config.color }}>{config.name}</span>{" "}
@@ -149,111 +160,44 @@ export default async function TierPage({
               <FlowerCard
                 key={`${f.sku}-${f.slug}`}
                 flower={f}
-                tierColor={config.color}
                 tierKey={tierInfo.key}
               />
             ))}
           </div>
         </div>
       </section>
+
+      {/* ── SEO Content ── */}
+      {seo && (
+        <section className={styles.seoSection}>
+          <div className={styles.container}>
+            <h2 className={styles.seoMainTitle}>{seo.seoTitle}</h2>
+            <p className={styles.seoIntro}>{seo.seoIntro}</p>
+
+            {seo.sections.map((s, i) => (
+              <div key={i} className={styles.seoBlock}>
+                <h3 className={styles.seoHeading}>{s.heading}</h3>
+                <p className={styles.seoBody}>{s.body}</p>
+              </div>
+            ))}
+
+            {/* FAQ Accordion */}
+            {seo.faqs.length > 0 && (
+              <div className={styles.faqSection}>
+                <h3 className={styles.seoHeading}>Frequently Asked Questions</h3>
+                {seo.faqs.map((faq, i) => (
+                  <details key={i} className={styles.faqItem}>
+                    <summary className={styles.faqQuestion}>{faq.q}</summary>
+                    <p className={styles.faqAnswer}>{faq.a}</p>
+                  </details>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      <Footer />
     </main>
-  );
-}
-
-/* -- Flower Card component -- */
-function FlowerCard({
-  flower,
-  tierColor,
-  tierKey,
-}: {
-  flower: FlowerProduct;
-  tierColor: string;
-  tierKey: string;
-}) {
-  const typeLabel = flower.type === "indica" ? "Indica" : flower.type === "sativa" ? "Sativa" : "Hybrid";
-  const typeClass = flower.type === "indica" ? styles.indica : flower.type === "sativa" ? styles.sativa : styles.hybrid;
-
-  // Top 3 tiers get 6g label
-  const isTopTier = TOP_TIERS.includes(flower.tier);
-  const fiveGLabel = isTopTier ? "6g" : "5g";
-  const fiveGGrams = isTopTier ? 6 : 5;
-
-  // Build weight/price list
-  const weights = [
-    { label: "3g", grams: 3, p: flower.price3g },
-    { label: fiveGLabel, grams: fiveGGrams, p: flower.price5g },
-    { label: "14g", grams: 14, p: flower.price14g },
-    { label: "28g", grams: 28, p: flower.price28g },
-  ].filter((x) => x.p !== null);
-
-  // Find lowest effective price for main display
-  const mainWeight = weights[0];
-  const effectivePrice = mainWeight?.p ? (mainWeight.p.sale ?? mainWeight.p.regular) : 0;
-
-  // Best per-gram value
-  const perGrams = weights.map(({ grams, p }) => {
-    if (!p) return 99;
-    return (p.sale ?? p.regular) / grams;
-  });
-  const bestPerG = Math.min(...perGrams);
-
-  return (
-    <Link
-      href={`/flower/${flower.slug}`}
-      className={styles.card}
-      style={{ "--tier-color": tierColor } as React.CSSProperties}
-    >
-      <div className={styles.cardMedia}>
-        {flower.image ? (
-          <img src={flower.image} alt={flower.name} loading="lazy" className={styles.cardImg} />
-        ) : (
-          <div className={styles.cardPlaceholder}>{flower.name[0]}</div>
-        )}
-
-        <div className={styles.cardBadges}>
-          <span className={styles.badgeThc}>THC {flower.thc}</span>
-          {flower.isSale && <span className={styles.badgeSale}>SALE</span>}
-          {flower.isHot && <span className={styles.badgeHot}>HOT 🔥</span>}
-        </div>
-      </div>
-
-      <div className={styles.cardBody}>
-        <span className={`${styles.typeTag} ${typeClass}`}>{typeLabel}</span>
-        <h3 className={styles.cardName}>{flower.name}</h3>
-
-        <div className={styles.cardPricing}>
-          {mainWeight && mainWeight.p && (
-            <>
-              {mainWeight.p.sale !== null ? (
-                <div className={styles.salePrice}>
-                  <span className={styles.priceOld}>${mainWeight.p.regular}</span>
-                  <span className={styles.priceNew}>${mainWeight.p.sale}</span>
-                </div>
-              ) : (
-                <div className={styles.regularPrice}>
-                  <span className={styles.price}>${mainWeight.p.regular}</span>
-                </div>
-              )}
-            </>
-          )}
-          <span className={styles.pricePerG}>From ${bestPerG.toFixed(2)}/g</span>
-        </div>
-
-        {/* Weight pills with prices */}
-        <div className={styles.weights}>
-          {weights.map(({ label, p }) => {
-            const price = p ? (p.sale ?? p.regular) : 0;
-            return (
-              <span key={label} className={styles.weightPill}>
-                <span className={styles.weightLabel}>{label}</span>
-                <span className={styles.weightPrice}>${price}</span>
-              </span>
-            );
-          })}
-        </div>
-
-        <div className={styles.cardCta}>View Strain →</div>
-      </div>
-    </Link>
   );
 }
