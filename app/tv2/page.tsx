@@ -192,12 +192,12 @@ function PromoCard({ title, accent }: { title: string; accent: string }) {
    VERTICAL TICKER
    ═══════════════════════════════════════ */
 const TICKER_SLIDES = [
-  "🔥 EarthRoot Cannabis — 5120 Dundas St W,
-  "200+ Strains In Stock",
-  "Open 24 Hours",
-  "Pre-Rolls • Edibles • Vapes • Concentrates",
-  "ALL SALES ARE FINAL",
-  "🎮 Play Games at spiritcornercannabis.com/games",
+  🔥  — ,
+  200+ Strains In Stock,
+  Open 24 Hours,
+  Pre-Rolls • Edibles • Vapes • Concentrates,
+  ALL SALES ARE FINAL,
+  🎮 Play Games at /games,
 ];
 
 function VerticalTicker() {
